@@ -2,6 +2,8 @@ package com.example.thi.controller;
 
 import com.example.thi.entity.*;
 import com.example.thi.repository.*;
+import com.example.thi.service.ExcelExportService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,11 +11,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Controller
+
 public class quanLiNV {
     @Autowired
     StaffRepository staffRepository;
@@ -28,6 +32,19 @@ public class quanLiNV {
     @Autowired
     DepartmentFacilityRepository departmentFacilityRepository;
 //    bo mon
+
+    @Autowired
+    private StaffMajorFacilityRepository staffMajorFacilityRepository;
+//nhan vien
+    @Autowired
+    MajorRepository majorRepository;
+
+    @Autowired
+    DepartmentRepository departmentRepository;
+
+    @Autowired
+    ExcelExportService excelExportService;
+
     @RequestMapping("/quan-li")
     public String quanLiSinhVien(Model model) {
         List<Staff> staff = staffRepository.findAll();
@@ -141,9 +158,10 @@ public class quanLiNV {
         // Tìm danh sách bộ môn và chuyên ngành
         List<DepartmentFacility> listBoMon = departmentFacilityRepository.findAll();
         List<MajorFacility> listChuyenNganh = majorFacilityRepository.findAll();
-
+        List<StaffMajorFacility> listNhanVien = staffMajorFacilityRepository.findAll();
 
 //
+        model.addAttribute("listNhanVien", listNhanVien);
         model.addAttribute("listBoMon", listBoMon);
         model.addAttribute("listCoSo", listCoSo);
         model.addAttribute("listChuyenNganh",listChuyenNganh);
@@ -160,6 +178,13 @@ public class quanLiNV {
         // Tìm danh sách bộ môn và chuyên ngành
         List<DepartmentFacility> listBoMon = departmentFacilityRepository.findAll();
         List<MajorFacility> listChuyenNganh = majorFacilityRepository.findAll();
+        List<StaffMajorFacility> listNhanVien = staffMajorFacilityRepository.findAll();
+
+//
+
+
+
+        model.addAttribute("listNhanVien", listNhanVien);
         model.addAttribute("listchuyenNganh", listChuyenNganh);
         model.addAttribute("listBoMon", listBoMon);
         model.addAttribute("listCoSo", listCoSo);
@@ -168,21 +193,100 @@ public class quanLiNV {
     }
 
     @RequestMapping("/chonBoMon/{id}/{coSoId}")
-    public String chonBoMon(@PathVariable UUID coSoId, Model model,@PathVariable UUID id,@RequestParam UUID boMonid) {
+    public String chonBoMon(@PathVariable UUID id, @PathVariable UUID coSoId, @RequestParam UUID boMonid, Model model) {
         Optional<Staff> staff2 = staffRepository.findById(id);
         model.addAttribute("staff1", staff2.orElse(null));
-        // Tìm danh sách cơ sở
         List<Facility> listCoSo = facilityRepository.findAll();
-        // Tìm danh sách bộ môn và chuyên ngành
         List<DepartmentFacility> listBoMon = departmentFacilityRepository.findAll();
         List<MajorFacility> listChuyenNganh = majorFacilityRepository.findAll();
+        List<StaffMajorFacility> listNhanVien = staffMajorFacilityRepository.findAll();
+
+//
+        model.addAttribute("listNhanVien", listNhanVien);
         model.addAttribute("listchuyenNganh", listChuyenNganh);
         model.addAttribute("listBoMon", listBoMon);
         model.addAttribute("listCoSo", listCoSo);
         model.addAttribute("coSoId", coSoId);
         model.addAttribute("boMonid", boMonid);
+
         return "chonChuyenNganh";
     }
 
+    @RequestMapping("/chonChuyenNganh/{id}/{coSoId}/{boMonid}")
+    public String chonTatCa(@PathVariable UUID id, @PathVariable UUID coSoId,@PathVariable UUID boMonid, @RequestParam UUID chuyenNganhid, Model model) {
+        Optional<Staff> staff2 = staffRepository.findById(id);
+        model.addAttribute("staff1", staff2.orElse(null));
+        List<Facility> listCoSo = facilityRepository.findAll();
+        List<DepartmentFacility> listBoMon = departmentFacilityRepository.findAll();
+        List<MajorFacility> listChuyenNganh = majorFacilityRepository.findAll();
+        List<StaffMajorFacility> listNhanVien = staffMajorFacilityRepository.findAll();
 
+//
+        model.addAttribute("listNhanVien", listNhanVien);
+        model.addAttribute("listchuyenNganh", listChuyenNganh);
+        model.addAttribute("listBoMon", listBoMon);
+        model.addAttribute("listCoSo", listCoSo);
+        model.addAttribute("coSoId", coSoId);
+        model.addAttribute("boMonid", boMonid);
+        model.addAttribute("chuyenNganhid", chuyenNganhid);
+        return "All";
+    }
+
+    @PostMapping(value = "/addChuyenNganh/{id}/{coSoId}/{boMonid}/{chuyenNganhid}")
+    public String ThemChuyenNganh(@PathVariable UUID id, @PathVariable UUID coSoId,@PathVariable UUID boMonid, @PathVariable UUID chuyenNganhid, Model model) {
+        Optional<Staff> staff2 = staffRepository.findById(id);
+        model.addAttribute("staff1", staff2.orElse(null));
+        List<Facility> listCoSo = facilityRepository.findAll();
+        List<DepartmentFacility> listBoMon = departmentFacilityRepository.findAll();
+        List<MajorFacility> listChuyenNganh = majorFacilityRepository.findAll();
+        List<StaffMajorFacility> listNhanVien = staffMajorFacilityRepository.findAll();
+
+//
+        model.addAttribute("listNhanVien", listNhanVien);
+        model.addAttribute("listchuyenNganh", listChuyenNganh);
+        model.addAttribute("listBoMon", listBoMon);
+        model.addAttribute("listCoSo", listCoSo);
+        model.addAttribute("coSoId", coSoId);
+        model.addAttribute("boMonid", boMonid);
+        model.addAttribute("chuyenNganhid", chuyenNganhid);
+
+        Staff staff = staffRepository.findById(id).get();
+        StaffMajorFacility staffMajorFacility = new StaffMajorFacility();
+
+        Facility facility = facilityRepository.findById(coSoId).get();
+        model.addAttribute("x",facility);
+
+        DepartmentFacility departmentFacility = departmentFacilityRepository.findById(boMonid).get();
+
+        Department department = departmentFacility.getIdDepartment();
+
+        departmentFacility.setIdDepartment(department);
+        departmentFacility.setIdFacility(facility);
+
+        MajorFacility majorFacility = majorFacilityRepository.findById(chuyenNganhid).get();
+        Major major = majorFacility.getIdMajor();
+        majorFacility.setIdMajor(major);
+        majorFacility.setIdDepartmentFacility(departmentFacility);
+
+        staffMajorFacility.setId(majorFacility.getIdMajor().getId());
+        staffMajorFacility.setIdStaff(staff);
+        staffMajorFacility.setIdMajorFacility(majorFacility);
+        staffMajorFacility.setStatus((short) 1);
+        staffMajorFacilityRepository.save(staffMajorFacility);
+        return "redirect:/chuyenNganh/" + id;
+    }
+    @RequestMapping("/xoaChuyenNganh/{id}/{idStaff}")
+    public String xoaChuyenNganh(@PathVariable UUID id,@PathVariable UUID idStaff, Model model) {
+        staffMajorFacilityRepository.deleteById(id);
+        return "redirect:/chuyenNganh/" + idStaff;
+    }
+
+    @GetMapping("/export")
+    public void exportStaffListToExcel(HttpServletResponse response) throws IOException {
+        List<Staff> staffList = staffRepository.findAll();
+        excelExportService.exportStaffList(response, staffList);
+    }
 }
+
+
+

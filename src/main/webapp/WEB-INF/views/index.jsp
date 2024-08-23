@@ -43,7 +43,7 @@
 </form>
 <p>${error.message}</p>
 <div>
-    <a href="" class="btn btn-primary">
+    <a href="/export" class="btn btn-primary">
         export
     </a>
     <a href="" class="btn btn-primary">

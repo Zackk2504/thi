@@ -1,12 +1,10 @@
-<%@ page import="com.example.thi.entity.MajorFacility" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: khuong
   Date: 8/22/2024
-  Time: 10:12 PM
+  Time: 11:41 PM
   To change this template use File | Settings | File Templates.
 --%>
-
-<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -79,7 +77,7 @@
             <option value="">Chọn chuyên ngành</option>
             <c:forEach var="l" items="${listchuyenNganh}">
                 <c:if test="${l.idDepartmentFacility.id.equals(boMonid)}">
-                    <option value="${l.id}" <c:if test="${l.id.equals(chuyenNganhId)}">selected</c:if>>
+                    <option value="${l.id}" <c:if test="${l.id.equals(chuyenNganhid)}">selected</c:if>>
                             ${l.idMajor.name}
                     </option>
                 </c:if>
@@ -87,11 +85,14 @@
         </select>
     </div>
 </form>
+<form action="/addChuyenNganh/${staff1.id}/${coSoId}/${boMonid}/${chuyenNganhid}" method="post">
+    <button type="submit" class="btn btn-primary">Thêm</button>
+</form>
 
 
 
 
-<%--<button type="submit" class="btn btn-primary">Thêm</button>--%>
+
 <table class="table">
     <tr>
         <td>stt</td>
@@ -103,13 +104,14 @@
     <tbody>
 
     <c:forEach items="${listNhanVien}" var="s" varStatus="i">
-        <c:if test="${s.idStaff.id == id}">
+        <c:if test="${s.idStaff.id==id}">
             <tr>
-                <td>${index +1}</td>
+                <td>${i.index +1}</td>
                 <td>${s.idMajorFacility.idDepartmentFacility.idFacility.name}</td>
                 <td>${s.idMajorFacility.idMajor.name}</td>
                 <td>${s.idMajorFacility.idDepartmentFacility.idDepartment.name}</td>
-                <td>                    <a href="/xoaChuyenNganh/${s.id}/${id}" class="btn btn-warning">Xóa</a>
+                <td>
+                    <a href="/xoaChuyenNganh/${s.id}/${id}" class="btn btn-warning">Xóa</a>
                 </td>
             </tr>
         </c:if>

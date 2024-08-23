@@ -7,5 +7,4 @@ import java.util.List;
 import java.util.UUID;
 
 public interface MajorFacilityRepository extends JpaRepository<MajorFacility, UUID> {
-//    List<MajorFacility> findByDepartmentFacilityId(UUID departmentFacilityId);
 }

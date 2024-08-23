@@ -87,10 +87,36 @@
         </select>
     </div>
 
-    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+<%--    <button type="submit" class="btn btn-primary">Thêm</button>--%>
 <%--</form>--%>
 
+<table class="table">
+    <tr>
+        <td>stt</td>
+        <td>cơ sở</td>
+        <td>bộ môn</td>
+        <td>Chuyên ngành</td>
+        <td>Hành động</td>
+    </tr>
+    <tbody>
 
+    <c:forEach items="${listNhanVien}" var="s" varStatus="i">
+        <c:if test="${s.idStaff.id==id}">
+            <tr>
+                <td>${i.index +1}</td>
+                <td>${s.idMajorFacility.idDepartmentFacility.idFacility.name}</td>
+                <td>${s.idMajorFacility.idMajor.name}</td>
+                <td>${s.idMajorFacility.idDepartmentFacility.idDepartment.name}</td>
+                <td>                    <a href="/xoaChuyenNganh/${s.id}/${id}" class="btn btn-warning">Xóa</a>
+                </td>
+
+            </tr>
+        </c:if>
+    </c:forEach>
+
+    </tbody>
+
+</table>
 </body>
 </html>
 

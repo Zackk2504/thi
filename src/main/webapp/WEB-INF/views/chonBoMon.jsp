@@ -8,6 +8,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+
+<%@ page import="java.util.List" %>
+<%@ page import="com.example.thi.entity.MajorFacility" %>
 <html>
 <head>
     <title>Title</title>
@@ -20,19 +23,19 @@
     <h3>Chuyên ngành</h3>
     <div class="mb-3">
         <label class="form-label">Mã nhân viên</label>
-        <input type="text" class="form-control" name="staffCode" value="${staff1.staffCode}">
+        <input type="text" class="form-control" name="staffCode" value="${staff1.staffCode}" readonly>
     </div>
     <div class="mb-3">
         <label class="form-label">Tên nhân viên</label>
-        <input type="text" class="form-control" name="name" value="${staff1.name}">
+        <input type="text" class="form-control" name="name" value="${staff1.name}" readonly>
     </div>
     <div class="mb-3">
         <label class="form-label">Email FPT</label>
-        <input type="email" class="form-control" name="accountFpt" value="${staff1.accountFpt}">
+        <input type="email" class="form-control" name="accountFpt" value="${staff1.accountFpt}" readonly>
     </div>
     <div class="mb-3">
         <label class="form-label">Email Fe</label>
-        <input type="email" class="form-control" name="accountFe" value="${staff1.accountFe}">
+        <input type="email" class="form-control" name="accountFe" value="${staff1.accountFe}" readonly>
     </div>
 </form>
 
@@ -71,7 +74,13 @@
     </div>
 </form>
 
-
+<%--<%--%>
+<%--    System.out.println("hello");--%>
+<%--    List<MajorFacility> listchuyenNganh = (List<MajorFacility>) request.getAttribute("listchuyenNganh");--%>
+<%--    for (MajorFacility k : listchuyenNganh) {--%>
+<%--        out.println("ID: " + k.getId() + ", Tên: " + k.getIdMajor().getName() + "<br>");--%>
+<%--    }--%>
+<%--%>--%>
 
 <div class="mb-3">
     <label for="chuyenNganh" class="form-label">Chuyên ngành</label>
@@ -80,6 +89,32 @@
     </select>
 </div>
 
-<button type="submit" class="btn btn-primary">Tìm kiếm</button>
+<%--<button type="submit" class="btn btn-primary">Thêm</button>--%>
+<table class="table">
+    <tr>
+        <td>stt</td>
+        <td>cơ sở</td>
+        <td>bộ môn</td>
+        <td>Chuyên ngành</td>
+        <td>Hành động</td>
+    </tr>
+    <tbody>
+
+    <c:forEach items="${listNhanVien}" var="s" varStatus="i">
+        <c:if test="${s.idStaff.id==id}">
+            <tr>
+                <td>${i.index +1}</td>
+                <td>${s.idMajorFacility.idDepartmentFacility.idFacility.name}</td>
+                <td>${s.idMajorFacility.idMajor.name}</td>
+                <td>${s.idMajorFacility.idDepartmentFacility.idDepartment.name}</td>
+                <td>                    <a href="/xoaChuyenNganh/${s.id}/${id}" class="btn btn-warning">Xóa</a>
+                </td>
+            </tr>
+        </c:if>
+    </c:forEach>
+
+    </tbody>
+
+</table>
 </body>
 </html>

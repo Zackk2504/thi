@@ -13,6 +13,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -65,5 +66,7 @@ public class Staff {
     @Length(max = 15, message = "Mã nhân viên không được vượt quá 15 ký tự")
     @Column(name = "staff_code")
     private String staffCode;
-
+    // Thêm mối quan hệ với StaffMajorFacility
+    @OneToMany(mappedBy = "idStaff", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<StaffMajorFacility> staffMajorFacilities;
 }
