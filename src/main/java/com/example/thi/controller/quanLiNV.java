@@ -71,8 +71,39 @@ public class quanLiNV {
         if (result.hasErrors()) {
             List<Staff> staff1 = staffRepository.findAll();
             model.addAttribute("staff", staff1);
+            model.addAttribute("errors", result);
             return "index";
         }
+//        if (staffRepository.existsByAccountFpt(staff.getAccountFpt())) {
+//            List<Staff> staff1 = staffRepository.findAll();
+//            model.addAttribute("staff", staff1);
+//            model.addAttribute("duplicateError", "Mã đã tồn tại.");
+//            return "index";
+//        }
+//        if (
+//                staffRepository.existsByAccountFe(staff.getAccountFe())){
+//            List<Staff> staff1 = staffRepository.findAll();
+//            model.addAttribute("staff", staff1);
+//            model.addAttribute("duplicateError2", " email FPT  tồn tại.");
+//            return "index";
+//        }
+//        if (staffRepository.existsByStaffCode(staff.getStaffCode())) {
+//            List<Staff> staff1 = staffRepository.findAll();
+//            model.addAttribute("staff", staff1);
+//            model.addAttribute("duplicateError3", "email FE đã tồn tại.");
+//            return "index";
+//        }
+        // Kiểm tra trùng lặp mã, email
+        if (staffRepository.existsByAccountFpt(staff.getAccountFpt()) ||
+                staffRepository.existsByAccountFe(staff.getAccountFe()) ||
+                staffRepository.existsByStaffCode(staff.getStaffCode())) {
+            List<Staff> staff1 = staffRepository.findAll();
+            model.addAttribute("staff", staff1);
+            model.addAttribute("duplicateError", "Mã, email FPT hoặc email FE đã tồn tại.");
+            return "index";
+        }
+
+
         staff.setStatus((short) 1);
         staffRepository.save(staff);
         return "redirect:/quan-li";
@@ -86,17 +117,30 @@ public class quanLiNV {
     @RequestMapping("/detail/{id}")
     public String detail(Model model,@PathVariable UUID id) {
         Optional<Staff> staff2 = staffRepository.findById(id);
-
         model.addAttribute("staff1", staff2.get());
-
         return "updateForm";
     }
 
     @RequestMapping(value = "/putNV/{id}", method = RequestMethod.POST)
-    public String putNV( @ModelAttribute Staff staff, @PathVariable UUID id, Model model) {
+    public String putNV( @ModelAttribute Staff staff, @PathVariable UUID id, Model model, BindingResult result) {
 
 
         Optional<Staff> existingStaff = staffRepository.findById(id);
+
+        if (result.hasErrors()) {
+            List<Staff> staff1 = staffRepository.findAll();
+            model.addAttribute("staff", staff1);
+            model.addAttribute("errors", result);
+            return "updateForm";
+        }
+        if (staffRepository.existsByAccountFpt(staff.getAccountFpt()) ||
+                staffRepository.existsByAccountFe(staff.getAccountFe()) ||
+                staffRepository.existsByStaffCode(staff.getStaffCode())) {
+            List<Staff> staff1 = staffRepository.findAll();
+            model.addAttribute("staff", staff1);
+            model.addAttribute("duplicateError", "Mã, email FPT hoặc email FE đã tồn tại.");
+            return "updateForm";
+        }
 
             Staff staffToUpdate = existingStaff.get();
             staffToUpdate.setId(staff.getId());

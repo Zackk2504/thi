@@ -21,21 +21,49 @@
         <label for="" class="form-label">mã nhân viên</label>
         <input type="text" class="form-control" name="staffCode" >
         <c:if test="${errors.hasFieldErrors('staffCode')}">
-            <div>${errors.getFieldError('staffCode').defaultMessage}</div>
+            <div class="text-danger">${errors.getFieldError('staffCode').defaultMessage}</div>
         </c:if>
+<%--        <c:if test="${not empty duplicateError}">--%>
+<%--            <div class="alert alert-danger">--%>
+<%--                    ${duplicateError}--%>
+<%--            </div>--%>
+<%--        </c:if>--%>
     </div>
     <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">tên nhân viên </label>
         <input type="text" class="form-control" id="" name="name" >
+        <c:if test="${errors.hasFieldErrors('name')}">
+            <div class="text-danger">${errors.getFieldError('name').defaultMessage}</div>
+        </c:if>
     </div>
     <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Email fpt</label>
         <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="accountFpt" >
-
+        <c:if test="${errors.hasFieldErrors('accountFpt')}">
+            <div class="text-danger">${errors.getFieldError('accountFpt').defaultMessage}</div>
+        </c:if>
+<%--        <c:if test="${not empty duplicateError2}">--%>
+<%--            <div class="alert alert-danger">--%>
+<%--                    ${duplicateError2}--%>
+<%--            </div>--%>
+<%--        </c:if>--%>
+        <c:if test="${not empty duplicateError}">
+            <div class="alert alert-danger">
+                    ${duplicateError}
+            </div>
+        </c:if>
     </div>
     <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">Email Fe</label>
         <input type="email" class="form-control" id="exampleInputPassword1" name="accountFe" >
+        <c:if test="${errors.hasFieldErrors('accountFe')}">
+            <div class="text-danger">${errors.getFieldError('accountFe').defaultMessage}</div>
+        </c:if>
+        <c:if test="${not empty duplicateError3}">
+            <div class="alert alert-danger">
+                    ${duplicateError3}
+            </div>
+        </c:if>
     </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>
